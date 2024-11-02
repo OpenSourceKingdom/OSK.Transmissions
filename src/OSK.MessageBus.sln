@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Abstractions", "OSK.MessageBus.Abstractions\OSK.MessageBus.Abstractions.csproj", "{BD47D1A7-9844-4F2D-829E-7A5C3A6AAF26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus", "OSK.MessageBus\OSK.MessageBus.csproj", "{8D38C3EE-CD3D-4A71-877B-763E929C25D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Events.Abstractions", "OSK.MessageBus.Events.Abstractions\OSK.MessageBus.Events.Abstractions.csproj", "{313058C3-0508-47D7-AEED-85379614532A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Application", "OSK.MessageBus.Application\OSK.MessageBus.Application.csproj", "{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.UnitTests", "OSK.MessageBus.UnitTests\OSK.MessageBus.UnitTests.csproj", "{0AD36210-0F0F-407E-95F2-4E9D3A0E3D73}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD47D1A7-9844-4F2D-829E-7A5C3A6AAF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD47D1A7-9844-4F2D-829E-7A5C3A6AAF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD47D1A7-9844-4F2D-829E-7A5C3A6AAF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD47D1A7-9844-4F2D-829E-7A5C3A6AAF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D38C3EE-CD3D-4A71-877B-763E929C25D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D38C3EE-CD3D-4A71-877B-763E929C25D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D38C3EE-CD3D-4A71-877B-763E929C25D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D38C3EE-CD3D-4A71-877B-763E929C25D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{313058C3-0508-47D7-AEED-85379614532A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{313058C3-0508-47D7-AEED-85379614532A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{313058C3-0508-47D7-AEED-85379614532A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{313058C3-0508-47D7-AEED-85379614532A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD36210-0F0F-407E-95F2-4E9D3A0E3D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD36210-0F0F-407E-95F2-4E9D3A0E3D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD36210-0F0F-407E-95F2-4E9D3A0E3D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD36210-0F0F-407E-95F2-4E9D3A0E3D73}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72623589-11C8-4DF8-846A-1B866789AD36}
+	EndGlobalSection
+EndGlobal
