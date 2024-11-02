@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RepositoryUrl>https://github.com/OpenSourceKingdom/OSK.MessageBus</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Description>An abstraction layer for communicating across a variety of different message buses seamlessly and easily. Meant to allow easy integration between different message buses without causing drastic changes to the consumers.</Description>
+		<PackageTags>OpenSourceKingdom, OpenSource, Abstraction, Generic, Communication, Message, Bus, Architecture, Async, Event, Consistency, Network, Api</PackageTags>
+		<Authors>BlankDev117</Authors>
+		<Title>OSK.MessageBus.Abstractions</Title>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="OSK.Functions.Outputs.Logging.Abstractions" Version="1.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\OSK.MessageBus.Events.Abstractions\OSK.MessageBus.Events.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>
