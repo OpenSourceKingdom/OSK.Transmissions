@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace OSK.MessageBus.Abstractions
 {
-    public interface IMessageEventSink
+    public interface IMessageEventBroadcaster
     {
-        Task<IOutput> PublishAsync<TMessage>(TMessage messageEvent, MessagePublishOptions options, CancellationToken cancellationToken = default)
+        Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(TMessage messageEvent, MessageBroadcastOptions options, CancellationToken cancellationToken = default)
             where TMessage : IMessageEvent;
     }
 }

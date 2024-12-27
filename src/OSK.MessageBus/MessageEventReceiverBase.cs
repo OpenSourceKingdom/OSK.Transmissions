@@ -14,12 +14,12 @@ namespace OSK.MessageBus
         public abstract void Dispose();
         public abstract void Start();
 
-        protected async Task HandleEventAsync<T>(T message, object? rawMessageEvent)
+        protected Task HandleEventAsync<T>(T message, object? rawMessageEvent)
             where T : IMessageEvent
         {
             using var scope = serviceProvider.CreateScope();
             var context = new MessageEventContext<T>(scope.ServiceProvider, message, rawMessageEvent);
-            await eventDelegate(context);
+            return eventDelegate(context);
         }
     }
 }

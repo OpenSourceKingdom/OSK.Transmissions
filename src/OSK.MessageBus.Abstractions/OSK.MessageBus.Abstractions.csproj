@@ -16,9 +16,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="OSK.Functions.Outputs.Logging.Abstractions" Version="1.5.0" />
+		<PackageReference Include="OSK.Hexagonal.MetaData" Version="0.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 		<ProjectReference Include="..\OSK.MessageBus.Events.Abstractions\OSK.MessageBus.Events.Abstractions.csproj" />
 	</ItemGroup>
 

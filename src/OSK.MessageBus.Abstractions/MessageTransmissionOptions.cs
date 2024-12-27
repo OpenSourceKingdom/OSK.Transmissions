@@ -2,7 +2,7 @@
 
 namespace OSK.MessageBus.Abstractions
 {
-    public class MessagePublishOptions
+    public class MessageTransmissionOptions
     {
         public TimeSpan DelayTimeSpan { get; set; }
     }

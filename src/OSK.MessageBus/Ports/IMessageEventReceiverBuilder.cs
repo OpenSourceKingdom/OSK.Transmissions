@@ -9,6 +9,6 @@ namespace OSK.MessageBus.Ports
     {
         IMessageEventReceiverBuilder Use(Func<MessageEventDelegate, MessageEventDelegate> middleware);
 
-        IMessageEventReceiver BuildReceiver(string subscriptionId);
+        IMessageEventReceiver BuildReceiver();
     }
 }

@@ -1,52 +1,21 @@
 ﻿using OSK.MessageBus.Ports;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OSK.MessageBus.Internal.Services
 {
-    internal class MessageEventReceiverManager(IServiceProvider serviceProvider) : IMessageEventReceiverManager
+    internal class MessageEventReceiverManager(IEnumerable<IMessageEventTransmissionBuilder> messageEventTransmissionBuilders) 
+        : IMessageEventReceiverManager
     {
         #region Variables
 
-        private readonly Dictionary<string, Func<IServiceProvider, IEnumerable<Action<IMessageEventReceiverBuilder>>, IMessageEventReceiverBuilder>> _builderFactories = new();
-        private readonly List<Action<IMessageEventReceiverBuilder>> _globalConfigurators = new();
-        private List<IMessageEventReceiver> _receivers = new();
+        private List<IMessageEventReceiver> _receivers = [];
         private bool _started;
 
         #endregion
 
         #region IMessageEventReceiverManager
-
-        public IMessageEventReceiverManager AddConfigurator(Action<IMessageEventReceiverBuilder> configurator)
-        {
-            if (configurator == null)
-            {
-                throw new ArgumentNullException(nameof(configurator));
-            }
-
-            _globalConfigurators.Add(configurator);
-            return this;
-        }
-
-        public IMessageEventReceiverManager AddEventReceiver(string subscriptionId,
-            Func<IServiceProvider, IEnumerable<Action<IMessageEventReceiverBuilder>>, IMessageEventReceiverBuilder> factory)
-        {
-            if (string.IsNullOrWhiteSpace(subscriptionId))
-            {
-                throw new ArgumentException("Subscription id can not be empty.", nameof(subscriptionId));
-            }
-            if (_builderFactories.TryGetValue(subscriptionId, out _))
-            {
-                throw new InvalidOperationException($"Subcription id, {subscriptionId}, has already been added.");
-            }
-            if (factory == null)
-            {
-                throw new ArgumentNullException("Factory can not be null.", nameof(factory));
-            }
-
-            _builderFactories[subscriptionId] = factory;
-            return this;
-        }
 
         public void Start()
         {
@@ -55,13 +24,10 @@ namespace OSK.MessageBus.Internal.Services
                 return;
             }
 
-            _receivers = new List<IMessageEventReceiver>();
-            foreach (var buildFactory in _builderFactories)
+            _receivers = [];
+            foreach (var receiver in BuildReceivers())
             {
-                var eventReceiverBuilder = buildFactory.Value(serviceProvider, _globalConfigurators);
-                var receiver = eventReceiverBuilder.BuildReceiver(buildFactory.Key);
                 receiver.Start();
-
                 _receivers.Add(receiver);
             }
 
@@ -101,6 +67,13 @@ namespace OSK.MessageBus.Internal.Services
         {
             Stop();
         }
+
+        #endregion
+
+        #region Helpers
+
+        private IEnumerable<IMessageEventReceiver> BuildReceivers()
+            => messageEventTransmissionBuilders.SelectMany(builder => builder.BuildReceivers());
 
         #endregion
     }

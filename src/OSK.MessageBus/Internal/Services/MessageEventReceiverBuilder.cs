@@ -1,18 +1,20 @@
-﻿using OSK.MessageBus.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OSK.MessageBus.Models;
 using OSK.MessageBus.Ports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OSK.MessageBus
+namespace OSK.MessageBus.Internal.Services
 {
-    public abstract class MessageEventReceiverBuilderBase : IMessageEventReceiverBuilder
+    internal class MessageEventReceiverBuilder(IServiceProvider serviceProvider, MessageEventReceiverDescriptor descriptor)
+        : IMessageEventReceiverBuilder
     {
         #region Variables
 
         private const string UnhandledEventMessage = "No event handlers were registered and the event could not be processed.";
 
-        private readonly List<Func<MessageEventDelegate, MessageEventDelegate>> _middlewares = new();
+        private readonly List<Func<MessageEventDelegate, MessageEventDelegate>> _middlewares = [];
 
         #endregion
 
@@ -29,18 +31,7 @@ namespace OSK.MessageBus
             return this;
         }
 
-        public IMessageEventReceiver BuildReceiver(string subscriptionId)
-        {
-            return BuildReceiver(subscriptionId, BuildMessageEventDelegate());
-        }
-
-        #endregion
-
-        #region Helpers
-
-        protected abstract IMessageEventReceiver BuildReceiver(string subscriptionId, MessageEventDelegate eventDelegate);
-
-        private MessageEventDelegate BuildMessageEventDelegate()
+        public IMessageEventReceiver BuildReceiver()
         {
             if (_middlewares.Count == 0)
             {
@@ -51,8 +42,11 @@ namespace OSK.MessageBus
             {
                 throw new InvalidOperationException(UnhandledEventMessage);
             };
-            return Enumerable.Reverse(_middlewares)
+            eventDelegate = Enumerable.Reverse(_middlewares)
                              .Aggregate(eventDelegate, (aggregatedDelegate, middleware) => middleware(aggregatedDelegate));
+
+            return (IMessageEventReceiver)ActivatorUtilities.CreateInstance(serviceProvider, descriptor.ReceiverType,
+                [descriptor.ReceiverId, eventDelegate, ..descriptor.Parameters]);
         }
 
         #endregion

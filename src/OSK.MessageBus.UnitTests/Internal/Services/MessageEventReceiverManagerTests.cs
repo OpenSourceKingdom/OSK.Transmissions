@@ -3,12 +3,13 @@ using OSK.MessageBus.Internal.Services;
 using OSK.MessageBus.Ports;
 using Xunit;
 
-namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
+namespace OSK.MessageBus.UnitTests.Internal.Services
 {
     public class MessageEventReceiverManagerTests
     {
         #region Variables
 
+        private readonly Mock<IMessageEventTransmissionBuilder> _transmissionBuilder;
         private readonly IMessageEventReceiverManager _manager;
 
         #endregion
@@ -17,51 +18,9 @@ namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
 
         public MessageEventReceiverManagerTests()
         {
-            _manager = new MessageEventReceiverManager(Mock.Of<IServiceProvider>());
-        }
+            _transmissionBuilder = new Mock<IMessageEventTransmissionBuilder>();
 
-        #endregion
-
-        #region AddConfigurator
-
-        [Fact]
-        public void AddConfigurator_NullAction_ThrowsArgumentNullException()
-        {
-            // Arrange/Act/Assert
-            Assert.Throws<ArgumentNullException>(() => _manager.AddConfigurator(null));
-        }
-
-        [Fact]
-        public void AddConfigurator_ValidAction_ReturnsSuccessfully()
-        {
-            // Arrange/Act/Assert
-            _manager.AddConfigurator(_ => { });
-        }
-
-        #endregion
-
-        #region AddEventReceiver
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("  ")]
-        public void AddEventReceiver_InvalidSubscriptionId_ThrowsArgumentException(string subscriptionId)
-        {
-            // Arrange/Act/Assert
-            Assert.Throws<ArgumentException>(() => _manager.AddEventReceiver(subscriptionId,
-                (_, _) => Mock.Of<IMessageEventReceiverBuilder>()));
-        }
-
-        [Fact]
-        public void AddEventReceiver_DuplicateSubscriptionId_ThrowsInvalidOperationException()
-        {
-            // Arrange/Act
-            _manager.AddEventReceiver("Abc", (_, _) => Mock.Of<IMessageEventReceiverBuilder>());
-
-            // Assert
-            Assert.Throws<InvalidOperationException>(() => 
-            _manager.AddEventReceiver("Abc", (_, _) => Mock.Of<IMessageEventReceiverBuilder>()));
+            _manager = new MessageEventReceiverManager([ _transmissionBuilder.Object ]);
         }
 
         #endregion
@@ -73,18 +32,16 @@ namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
         {
             // Arrange
             var mockReceiver = new Mock<IMessageEventReceiver>();
-            var builder = new Mock<IMessageEventReceiverBuilder>();
-            builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                .Returns(mockReceiver.Object);
 
-            _manager.AddEventReceiver("Abc", (_, _) => builder.Object);
+            _transmissionBuilder.Setup(m => m.BuildReceivers())
+                .Returns([mockReceiver.Object]);
 
             // Act
             _manager.Start();
             _manager.Start();
 
-            // Asseer
-            builder.Verify(m => m.BuildReceiver(It.IsAny<string>()), Times.Once);
+            // Assert
+            _transmissionBuilder.Verify(m => m.BuildReceivers(), Times.Once);
             mockReceiver.Verify(m => m.Start(), Times.Once);
         }
 
@@ -103,30 +60,8 @@ namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
             receiverB.Setup(m => m.Dispose())
                 .Throws<InvalidOperationException>();
 
-            _manager.AddEventReceiver("A", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverA.Object);
-
-                return builder.Object;
-            });
-            _manager.AddEventReceiver("B", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverB.Object);
-
-                return builder.Object;
-            });
-            _manager.AddEventReceiver("C", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverC.Object);
-
-                return builder.Object;
-            });
+            _transmissionBuilder.Setup(m => m.BuildReceivers())
+                .Returns([receiverA.Object, receiverB.Object, receiverC.Object]);
 
             _manager.Start();
 
@@ -134,7 +69,7 @@ namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
             Assert.Throws<AggregateException>(_manager.Stop);
             _manager.Stop();
 
-            receiverA.Verify(m =>  m.Dispose(), Times.Once);
+            receiverA.Verify(m => m.Dispose(), Times.Once);
             receiverB.Verify(m => m.Dispose(), Times.Once);
             receiverC.Verify(m => m.Dispose(), Times.Once);
         }
@@ -147,30 +82,8 @@ namespace OSK.MessageBus.RabbitMQ.UnitTests.Internal.Services
             var receiverB = new Mock<IMessageEventReceiver>();
             var receiverC = new Mock<IMessageEventReceiver>();
 
-            _manager.AddEventReceiver("A", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverA.Object);
-
-                return builder.Object;
-            });
-            _manager.AddEventReceiver("B", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverB.Object);
-
-                return builder.Object;
-            });
-            _manager.AddEventReceiver("C", (_, _) =>
-            {
-                var builder = new Mock<IMessageEventReceiverBuilder>();
-                builder.Setup(m => m.BuildReceiver(It.IsAny<string>()))
-                    .Returns(receiverC.Object);
-
-                return builder.Object;
-            });
+            _transmissionBuilder.Setup(m => m.BuildReceivers())
+                .Returns([receiverA.Object, receiverB.Object, receiverC.Object]);
 
             _manager.Start();
 
