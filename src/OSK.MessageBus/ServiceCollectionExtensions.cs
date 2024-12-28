@@ -11,10 +11,17 @@ namespace OSK.MessageBus
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMessageBus(this IServiceCollection services)
-            => services.AddMessageBus(_ => { });
+        #region Add Core Services
 
-        public static IServiceCollection AddMessageBus(this IServiceCollection services, 
+        /// <summary>
+        /// Adds the necessary services t
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddMessageTransmissions(this IServiceCollection services)
+            => services.AddMessageTransmissions(_ => { });
+
+        public static IServiceCollection AddMessageTransmissions(this IServiceCollection services,
             Action<MessageBusConfigurationOptions> configuration)
         {
             services.TryAddTransient<IMessageEventReceiverManager, MessageEventReceiverManager>();
@@ -25,6 +32,10 @@ namespace OSK.MessageBus
 
             return services;
         }
+
+        #endregion
+
+        #region Helpers
 
         public static IServiceCollection AddMessageEventTransmitter<TTransmitter, TReceiver>(this IServiceCollection services, string transmitterId,
             Action<IMessageEventTransmissionBuilder<TReceiver>> transmissionBuilderConfiguration)
@@ -47,5 +58,7 @@ namespace OSK.MessageBus
 
             return services;
         }
+
+        #endregion
     }
 }
