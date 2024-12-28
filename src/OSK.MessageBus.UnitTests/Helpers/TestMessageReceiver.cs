@@ -4,14 +4,14 @@ using OSK.MessageBus.Ports;
 
 namespace OSK.MessageBus.UnitTests.Helpers
 {
-    public class TestMessageReceiver(string receiverId, MessageEventTransmissionDelegate eventDelegate,
-        int a, HashAlgorithmName algorithmName, TestSettings settings) : IMessageEventReceiver
+    public class TestMessageReceiver(string receiverId, MessageTransmissionDelegate eventDelegate,
+        int a, HashAlgorithmName algorithmName, TestSettings settings) : IMessageReceiver
     {
         public string ReceiverId = receiverId;
         public int A => a;
         public HashAlgorithmName AlgorithmName => algorithmName;
         public TestSettings Settings => settings;
-        public MessageEventTransmissionDelegate EventDelegate => eventDelegate;
+        public MessageTransmissionDelegate EventDelegate => eventDelegate;
 
         public void Dispose()
         {

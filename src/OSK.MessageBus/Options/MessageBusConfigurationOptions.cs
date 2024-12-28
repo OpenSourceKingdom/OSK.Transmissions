@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using OSK.MessageBus.Ports;
 
 namespace OSK.MessageBus.Options
@@ -9,13 +8,13 @@ namespace OSK.MessageBus.Options
     {
         #region Variables
 
-        internal List<Action<IMessageEventReceiverBuilder>> GlobalReceiverBuilderConfiguration { get; private set; } = [];
+        internal List<Action<IMessageReceiverBuilder>> GlobalReceiverBuilderConfiguration { get; private set; } = [];
 
         #endregion
 
         #region Helpers
 
-        public MessageBusConfigurationOptions AddGlobalReceiverConfiguration(Action<IMessageEventReceiverBuilder> configuration)
+        public MessageBusConfigurationOptions AddGlobalReceiverConfiguration(Action<IMessageReceiverBuilder> configuration)
         {
             if (configuration is null)
             {

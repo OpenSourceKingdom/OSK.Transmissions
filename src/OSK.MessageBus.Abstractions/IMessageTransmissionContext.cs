@@ -9,6 +9,6 @@ namespace OSK.MessageBus.Abstractions
 
         public object RawMessage { get; }
 
-        public IMessageEvent Message { get; }
+        public IMessage Message { get; }
     }
 }

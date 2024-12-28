@@ -12,18 +12,18 @@ namespace OSK.MessageBus
     {
         #region Handlers
 
-        public static IMessageEventReceiverBuilder UseHandler(this IMessageEventReceiverBuilder builder,
-            IMessageEventHandler handler)
+        public static IMessageReceiverBuilder UseHandler(this IMessageReceiverBuilder builder,
+            IMessageTransmissionHandler handler)
         {
             if (handler == null)
             {
                 throw new ArgumentNullException(nameof(handler));
             }
 
-            return builder.UseHandler(handler.HandleEventAsync);
+            return builder.UseHandler(handler.HandleTransmissionAsync);
         }
 
-        public static IMessageEventReceiverBuilder UseHandler(this IMessageEventReceiverBuilder builder,
+        public static IMessageReceiverBuilder UseHandler(this IMessageReceiverBuilder builder,
             Func<IMessageTransmissionContext, Task> handlerFunc)
         {
             if (handlerFunc == null)
@@ -35,20 +35,20 @@ namespace OSK.MessageBus
             return builder;
         }
 
-        public static IMessageEventReceiverBuilder UseHandler<THandler>(this IMessageEventReceiverBuilder builder)
-            where THandler : IMessageEventHandler
+        public static IMessageReceiverBuilder UseHandler<THandler>(this IMessageReceiverBuilder builder)
+            where THandler : IMessageTransmissionHandler
         {
             return builder.Use(_ => context =>
             {
                 var handler = context.Services.GetRequiredService<THandler>();
-                return handler.HandleEventAsync(context);
+                return handler.HandleTransmissionAsync(context);
             });
         }
 
-        public static IMessageEventReceiverBuilder UseHandler<TEvent, THandler>(this IMessageEventReceiverBuilder builder,
+        public static IMessageReceiverBuilder UseHandler<TEvent, THandler>(this IMessageReceiverBuilder builder,
             THandler handler)
-            where TEvent : IMessageEvent
-            where THandler : IMessageEventHandler<TEvent>
+            where TEvent : IMessage
+            where THandler : IMessageTransmissionHandler<TEvent>
         {
             if (handler == null)
             {
@@ -58,9 +58,9 @@ namespace OSK.MessageBus
             return builder.UseHandler<TEvent>(handler.HandleEventAsync);
         }
 
-        public static IMessageEventReceiverBuilder UseHandler<TEvent>(this IMessageEventReceiverBuilder builder,
-            Func<IMessageEventContext<TEvent>, Task> handleFunc)
-            where TEvent : IMessageEvent
+        public static IMessageReceiverBuilder UseHandler<TEvent>(this IMessageReceiverBuilder builder,
+            Func<IMessageTransmissionContext<TEvent>, Task> handleFunc)
+            where TEvent : IMessage
         {
             if (handleFunc == null)
             {
@@ -69,7 +69,7 @@ namespace OSK.MessageBus
 
             return builder.Use(next => context =>
             {
-                if (context is IMessageEventContext<TEvent> typedContext)
+                if (context is IMessageTransmissionContext<TEvent> typedContext)
                 {
                     return handleFunc(typedContext);
                 }
@@ -78,13 +78,13 @@ namespace OSK.MessageBus
             });
         }
 
-        public static IMessageEventReceiverBuilder UseHandler<TEvent, THandler>(this IMessageEventReceiverBuilder builder)
-            where TEvent : IMessageEvent
-            where THandler : IMessageEventHandler<TEvent>
+        public static IMessageReceiverBuilder UseHandler<TEvent, THandler>(this IMessageReceiverBuilder builder)
+            where TEvent : IMessage
+            where THandler : IMessageTransmissionHandler<TEvent>
         {
             return builder.Use(next => context =>
             {
-                if (context is IMessageEventContext<TEvent> typedContext)
+                if (context is IMessageTransmissionContext<TEvent> typedContext)
                 {
                     var handler = context.Services.GetRequiredService<THandler>();
                     return handler.HandleEventAsync(typedContext);
@@ -98,8 +98,8 @@ namespace OSK.MessageBus
 
         #region Middleware
 
-        public static IMessageEventReceiverBuilder UseMiddleware(this IMessageEventReceiverBuilder builder,
-            IMessageEventMiddleware middleware)
+        public static IMessageReceiverBuilder UseMiddleware(this IMessageReceiverBuilder builder,
+            IMessageTransmissionMiddleware middleware)
         {
             if (middleware == null)
             {
@@ -109,8 +109,8 @@ namespace OSK.MessageBus
             return builder.UseMiddleware(middleware.InvokeAsync);
         }
 
-        public static IMessageEventReceiverBuilder UseMiddleware(this IMessageEventReceiverBuilder builder,
-            Func<IMessageTransmissionContext, MessageEventTransmissionDelegate, Task> middlewareFunc)
+        public static IMessageReceiverBuilder UseMiddleware(this IMessageReceiverBuilder builder,
+            Func<IMessageTransmissionContext, MessageTransmissionDelegate, Task> middlewareFunc)
         {
             if (middlewareFunc == null)
             {
@@ -120,8 +120,8 @@ namespace OSK.MessageBus
             return builder.Use(next => context => middlewareFunc(context, next));
         }
 
-        public static IMessageEventReceiverBuilder UseMiddleware<TMiddleware>(this IMessageEventReceiverBuilder builder)
-            where TMiddleware : IMessageEventMiddleware
+        public static IMessageReceiverBuilder UseMiddleware<TMiddleware>(this IMessageReceiverBuilder builder)
+            where TMiddleware : IMessageTransmissionMiddleware
         {
             return builder.Use(next => context =>
             {
@@ -130,9 +130,9 @@ namespace OSK.MessageBus
             });
         }
 
-        public static IMessageEventReceiverBuilder UseMiddleware<TEvent>(this IMessageEventReceiverBuilder builder,
-            IMessageEventMiddleware<TEvent> middleware)
-            where TEvent : IMessageEvent
+        public static IMessageReceiverBuilder UseMiddleware<TEvent>(this IMessageReceiverBuilder builder,
+            IMessageTransmissionMiddleware<TEvent> middleware)
+            where TEvent : IMessage
         {
             if (middleware == null)
             {
@@ -142,9 +142,9 @@ namespace OSK.MessageBus
             return builder.UseMiddleware<TEvent>(middleware.InvokeAsync);
         }
 
-        public static IMessageEventReceiverBuilder UseMiddleware<TEvent>(this IMessageEventReceiverBuilder builder,
-            Func<IMessageEventContext<TEvent>, MessageEventTransmissionDelegate, Task> middlewareFunc)
-            where TEvent : IMessageEvent
+        public static IMessageReceiverBuilder UseMiddleware<TEvent>(this IMessageReceiverBuilder builder,
+            Func<IMessageTransmissionContext<TEvent>, MessageTransmissionDelegate, Task> middlewareFunc)
+            where TEvent : IMessage
         {
             if (middlewareFunc == null)
             {
@@ -153,7 +153,7 @@ namespace OSK.MessageBus
 
             return builder.Use(next => context =>
             {
-                if (context is IMessageEventContext<TEvent> typedContext)
+                if (context is IMessageTransmissionContext<TEvent> typedContext)
                 {
                     return middlewareFunc(typedContext, next);
                 }
@@ -162,13 +162,13 @@ namespace OSK.MessageBus
             });
         }
 
-        public static IMessageEventReceiverBuilder UseMiddleware<TEvent, TMiddleware>(this IMessageEventReceiverBuilder builder)
-            where TEvent : IMessageEvent
-            where TMiddleware : IMessageEventMiddleware<TEvent>
+        public static IMessageReceiverBuilder UseMiddleware<TEvent, TMiddleware>(this IMessageReceiverBuilder builder)
+            where TEvent : IMessage
+            where TMiddleware : IMessageTransmissionMiddleware<TEvent>
         {
             return builder.Use(next => context =>
             {
-                if (context is IMessageEventContext<TEvent> typedContext)
+                if (context is IMessageTransmissionContext<TEvent> typedContext)
                 {
                     var middleware = context.Services.GetRequiredService<TMiddleware>();
                     return middleware.InvokeAsync(typedContext, next);

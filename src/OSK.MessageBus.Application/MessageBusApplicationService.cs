@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OSK.MessageBus.Application
 {
-    public class MessageBusApplicationService(IMessageEventReceiverManager manager)
+    public class MessageBusApplicationService(IMessageReceiverManager manager)
         : IHostedService
     {
         #region IHostedService

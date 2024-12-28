@@ -2,7 +2,7 @@
 
 namespace OSK.MessageBus.UnitTests.Helpers
 {
-    public class TestEvent : IMessageEvent
+    public class TestEvent : IMessage
     {
         public string TopicId => throw new NotImplementedException();
     }

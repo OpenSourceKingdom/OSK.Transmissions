@@ -24,9 +24,9 @@ namespace OSK.MessageBus
         public static IServiceCollection AddMessageTransmissions(this IServiceCollection services,
             Action<MessageBusConfigurationOptions> configuration)
         {
-            services.TryAddTransient<IMessageEventReceiverManager, MessageEventReceiverManager>();
-            services.TryAddTransient<IMessageEventBroadcaster, MessageEventBroadcaster>();
-            services.TryAddTransient(typeof(IMessageEventTransmissionBuilder<>), typeof(MessageEventTransmissionBuilder<>));
+            services.TryAddTransient<IMessageReceiverManager, MessageReceiverManager>();
+            services.TryAddTransient<IMessageBroadcaster, MessageBroadcaster>();
+            services.TryAddTransient(typeof(IMessageTransmissionBuilder<>), typeof(MessageTransmissionBuilder<>));
 
             services.Configure(configuration);
 
@@ -38,19 +38,19 @@ namespace OSK.MessageBus
         #region Helpers
 
         public static IServiceCollection AddMessageEventTransmitter<TTransmitter, TReceiver>(this IServiceCollection services, string transmitterId,
-            Action<IMessageEventTransmissionBuilder<TReceiver>> transmissionBuilderConfiguration)
-            where TTransmitter : IMessageEventTransmitter
-            where TReceiver : IMessageEventReceiver
+            Action<IMessageTransmissionBuilder<TReceiver>> transmissionBuilderConfiguration)
+            where TTransmitter : IMessageTransmitter
+            where TReceiver : IMessageReceiver
         {
             if (transmissionBuilderConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(transmissionBuilderConfiguration));
             }
 
-            services.AddTransient(_ => new MessageEventTransmitterDescriptor(transmitterId, typeof(TTransmitter)));
+            services.AddTransient(_ => new MessageTransmitterDescriptor(transmitterId, typeof(TTransmitter)));
             services.AddTransient(serviceProvider =>
             {
-                var transmissionBuilder = serviceProvider.GetRequiredService<IMessageEventTransmissionBuilder<TReceiver>>();
+                var transmissionBuilder = serviceProvider.GetRequiredService<IMessageTransmissionBuilder<TReceiver>>();
                 transmissionBuilderConfiguration(transmissionBuilder);
 
                 return transmissionBuilder;
