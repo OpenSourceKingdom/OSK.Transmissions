@@ -2,7 +2,7 @@
 
 namespace OSK.MessageBus.Abstractions
 {
-    public interface IMessageEventContext<TMessage>: IMessageEventContext
+    public interface IMessageEventContext<TMessage>: IMessageTransmissionContext
         where TMessage : IMessageEvent
     {
         new TMessage Message { get; }

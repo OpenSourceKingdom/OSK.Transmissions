@@ -24,7 +24,7 @@ namespace OSK.MessageBus
         }
 
         public static IMessageEventReceiverBuilder UseHandler(this IMessageEventReceiverBuilder builder,
-            Func<IMessageEventContext, Task> handlerFunc)
+            Func<IMessageTransmissionContext, Task> handlerFunc)
         {
             if (handlerFunc == null)
             {
@@ -110,7 +110,7 @@ namespace OSK.MessageBus
         }
 
         public static IMessageEventReceiverBuilder UseMiddleware(this IMessageEventReceiverBuilder builder,
-            Func<IMessageEventContext, MessageEventTransmissionDelegate, Task> middlewareFunc)
+            Func<IMessageTransmissionContext, MessageEventTransmissionDelegate, Task> middlewareFunc)
         {
             if (middlewareFunc == null)
             {

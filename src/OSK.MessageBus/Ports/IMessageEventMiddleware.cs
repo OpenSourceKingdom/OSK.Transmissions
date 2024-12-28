@@ -6,6 +6,6 @@ namespace OSK.MessageBus.Ports
 {
     public interface IMessageEventMiddleware
     {
-        Task InvokeAsync(IMessageEventContext context, MessageEventTransmissionDelegate next);
+        Task InvokeAsync(IMessageTransmissionContext context, MessageEventTransmissionDelegate next);
     }
 }

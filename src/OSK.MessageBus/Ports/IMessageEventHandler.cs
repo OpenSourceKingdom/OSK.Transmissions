@@ -5,6 +5,6 @@ namespace OSK.MessageBus.Ports
 {
     public interface IMessageEventHandler
     {
-        Task HandleEventAsync(IMessageEventContext context);
+        Task HandleEventAsync(IMessageTransmissionContext context);
     }
 }

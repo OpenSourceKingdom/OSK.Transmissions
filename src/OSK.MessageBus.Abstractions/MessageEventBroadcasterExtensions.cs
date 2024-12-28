@@ -16,12 +16,12 @@ namespace OSK.MessageBus.Abstractions
 
         public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageEventBroadcaster broadcaster, TMessage messageEvent, TimeSpan delayTimeSpan, CancellationToken cancellationToken = default)
             where TMessage : IMessageEvent 
-            => broadcaster.BroadcastMessageAsync(messageEvent, new MessageBroadcastOptions()
+            => broadcaster.BroadcastMessageAsync(messageEvent, options =>
             {
-                TransmissionOptions = new MessageTransmissionOptions()
+                options.TransmissionOptions = new MessageTransmissionOptions()
                 {
                     DelayTimeSpan = delayTimeSpan
-                }
+                };
             }, cancellationToken);
 
         public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageEventBroadcaster broadcaster, TMessage messageEvent, 
@@ -32,13 +32,13 @@ namespace OSK.MessageBus.Abstractions
         public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageEventBroadcaster broadcaster, TMessage messageEvent, TimeSpan delayTimeSpan, 
             IEnumerable<string> transmitterTargetIds, CancellationToken cancellationToken = default)
             where TMessage : IMessageEvent
-            => broadcaster.BroadcastMessageAsync(messageEvent, new MessageBroadcastOptions()
+            => broadcaster.BroadcastMessageAsync(messageEvent, options =>
             {
-                TransmissionOptions = new MessageTransmissionOptions()
+                options.TransmissionOptions = new MessageTransmissionOptions()
                 {
                     DelayTimeSpan = delayTimeSpan
-                },
-                TransmitterTargetIds = transmitterTargetIds.ToHashSet()
+                };
+                options.TargetTransmitterIds = transmitterTargetIds.ToHashSet();
             }, cancellationToken);
     }
 }

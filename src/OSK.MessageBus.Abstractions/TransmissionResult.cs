@@ -6,7 +6,7 @@ namespace OSK.MessageBus.Abstractions
     {
         public string TransmitterId { get; set; } = string.Empty;
 
-        public bool Success => Exception is null;
+        public bool Successful => Exception is null;
 
         public Exception Exception { get; set; }
     }

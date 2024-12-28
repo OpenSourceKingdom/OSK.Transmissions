@@ -3,7 +3,7 @@ using System;
 
 namespace OSK.MessageBus.Abstractions
 {
-    public interface IMessageEventContext
+    public interface IMessageTransmissionContext
     {
         public IServiceProvider Services { get; }
 

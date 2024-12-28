@@ -6,6 +6,6 @@ namespace OSK.MessageBus.Abstractions
     {
         public MessageTransmissionOptions TransmissionOptions { get; set; }
 
-        public ISet<string> TransmitterTargetIds { get; set; }
+        public ISet<string> TargetTransmitterIds { get; set; }
     }
 }

@@ -3,5 +3,5 @@ using System.Threading.Tasks;
 
 namespace OSK.MessageBus.Models
 {
-    public delegate Task MessageEventTransmissionDelegate(IMessageEventContext messageEventContext);
+    public delegate Task MessageEventTransmissionDelegate(IMessageTransmissionContext transmissionContext);
 }

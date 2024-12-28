@@ -103,14 +103,14 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
             // Assert
             Assert.True(result.IsSuccessful);
             Assert.Equal(HttpStatusCode.MultiStatus, result.Code.StatusCode);
-            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => transmission.Success));
-            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => !transmission.Success));
+            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => transmission.Successful));
+            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => !transmission.Successful));
 
             var transmissionResultA = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterA");
-            Assert.True(transmissionResultA.Success);
+            Assert.True(transmissionResultA.Successful);
 
             var transmissionResultB = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterB");
-            Assert.False(transmissionResultB.Success);
+            Assert.False(transmissionResultB.Successful);
             Assert.IsType<InvalidOperationException>(transmissionResultB.Exception);
         }
 
@@ -135,13 +135,13 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
             // Assert
             Assert.True(result.IsSuccessful);
             Assert.Equal(HttpStatusCode.OK, result.Code.StatusCode);
-            Assert.Equal(2, result.Value.TransmissionResults.Count(transmission => transmission.Success));
+            Assert.Equal(2, result.Value.TransmissionResults.Count(transmission => transmission.Successful));
 
             var transmissionResultA = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterA");
-            Assert.True(transmissionResultA.Success);
+            Assert.True(transmissionResultA.Successful);
 
             var transmissionResultB = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterB");
-            Assert.True(transmissionResultB.Success);
+            Assert.True(transmissionResultB.Successful);
         }
 
         #endregion

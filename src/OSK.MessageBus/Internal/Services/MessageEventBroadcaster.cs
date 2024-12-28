@@ -25,17 +25,21 @@ namespace OSK.MessageBus.Internal.Services
 
         #region IMessageEventBroadcaster
 
-        public async Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(TMessage messageEvent, MessageBroadcastOptions options, CancellationToken cancellationToken = default)
+        public async Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(TMessage messageEvent, Action<MessageBroadcastOptions> broadcastConfiguration,
+            CancellationToken cancellationToken = default)
             where TMessage : IMessageEvent
         {
-            if (options is null)
+            if (broadcastConfiguration is null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(broadcastConfiguration));
             }
 
-            var targetedDescriptors = options.TransmitterTargetIds is null
+            MessageBroadcastOptions options = new();
+            broadcastConfiguration(options);
+
+            var targetedDescriptors = options.TargetTransmitterIds is null
                 ? transmitterDescriptors
-                : transmitterDescriptors.Where(transmitter => options.TransmitterTargetIds.Contains(transmitter.TransmitterId));
+                : transmitterDescriptors.Where(transmitter => options.TargetTransmitterIds.Contains(transmitter.TransmitterId));
 
             var transmissionResults = new List<TransmissionResult>();
             foreach (var descriptor in targetedDescriptors)
