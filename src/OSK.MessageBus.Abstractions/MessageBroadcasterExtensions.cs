@@ -1,10 +1,10 @@
 ﻿using OSK.Functions.Outputs.Abstractions;
-using OSK.MessageBus.Events.Abstractions;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using OSK.MessageBus.Messages.Abstractions;
 
 namespace OSK.MessageBus.Abstractions
 {

@@ -1,4 +1,4 @@
-﻿using OSK.MessageBus.Events.Abstractions;
+﻿using OSK.MessageBus.Messages.Abstractions;
 
 namespace OSK.MessageBus.Abstractions
 {

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Abstractions
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus", "OSK.MessageBus\OSK.MessageBus.csproj", "{8D38C3EE-CD3D-4A71-877B-763E929C25D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Events.Abstractions", "OSK.MessageBus.Events.Abstractions\OSK.MessageBus.Events.Abstractions.csproj", "{313058C3-0508-47D7-AEED-85379614532A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Messages.Abstractions", "OSK.MessageBus.Messages.Abstractions\OSK.MessageBus.Messages.Abstractions.csproj", "{313058C3-0508-47D7-AEED-85379614532A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSK.MessageBus.Application", "OSK.MessageBus.Application\OSK.MessageBus.Application.csproj", "{959B0CDD-1CAD-46FA-AAEA-58A94F7EC222}"
 EndProject

@@ -19,7 +19,7 @@ little easier.
 # OSK.MessageBus.Application
 Applications that need a message bus running in the background, so that processes can run asynchronously, will need a way to manage the receivers. The Application
 project provides a simple hosted service that will be added to the dependency container and can run in the background. For custom management, users can either manage
-their receivers directly by requesting the list of `IMessageEventTransmissionBuilder` which will allow creating the receivers as needed or by using the 
+their receivers directly by requesting the list of `IMessageReceiverGroupBuilder` which will allow creating the receivers as needed or by using the 
 `IMessageEventReceiverManager` to start or stop their receivers as needed
 
 # Usage: Message Bus Integrations
@@ -36,11 +36,11 @@ core implementation for how to communicate with the actual message bus, such as 
 
 Along with a core transmitter integration, integrations will need to implement an associated `IMessageEventReceiver`. These will be what listen for transmissions that are sent
 via a transmitter. These will be started and stopped either by the provided `IMessageEventReceiverManager` or some other management mechanism to start and stop each receiver. 
-Receivers should be disposed of when stopped and the `IMessageEventTransmissionBuilder` is used to create new receivers whenever the manager is started. Implementations of `IMessageEventReceiver`
+Receivers should be disposed of when stopped and the `IMessageReceiverGroupBuilder` is used to create new receivers whenever the manager is started. Implementations of `IMessageEventReceiver`
 should expect several arguments to be provided by the builder in their constructors: a unique string `receiverId`, a `MessageEventTransmissionDelegate`, and an `IServiceProvider`.
 A base implementation that can help with integrations is provided with `MessageEventReceiverBase`. The passed in delegate should be utilized when a transmission is received from a transmitter 
 and allows middlewares to interact with the transmission until a final handler is used to fully process the message for an application. Middlewares and handlers can be easily added
-using the `MessageEventReceiverBuilderExtensions`. When using `AddMessageEventTransmitter`, an `IMessageEventTransmissionBuilder` object will be provided via a lambda that will give access
+using the `MessageEventReceiverBuilderExtensions`. When using `AddMessageEventTransmitter`, an `IMessageReceiverGroupBuilder` object will be provided via a lambda that will give access
 to the consumer to set shared transmission channel middleware and grant access to an `IMessageReceiverBuilder` that is used to set the custom handlers and middlewares specific to a receiver.
 
 Construction of the transmitter and receiver objects occurs as needed via internal `MessageEventTransmitterDescriptor` and `MessageEventReceiverDescriptor` objects that are created for integration 
@@ -89,18 +89,18 @@ public static ServiceCollectionExtensions
             })
         })
 
-        services.AddTransmitter<CustomMessageBusTransmitter, CustomMessageBusReceiver>("NamedCustomMessageBusId", transmissionBuilder => {
-           transmissionBuilder.AddConfigurator(receiverBuilder => {
+        services.AddTransmitter<CustomMessageBusTransmitter, CustomMessageBusReceiver>("NamedCustomMessageBusId", groupBuilder => {
+           groupBuilder.AddConfigurator(receiverBuilder => {
             // Add shared middleware across all receivers for this transmitter
            })
 
-           transmissionBuilder.AddMessageEventReceiver(receiverId, customParameters, receiverBuilder => {
+           groupBuilder.AddMessageEventReceiver(receiverId, customParameters, receiverBuilder => {
             // Add custom middleware specific to this receiver
            })
 
            // For instances where an integration may want to implement more than one receiver type, receivers that
            // inherit from the receiver type in the AddTransmitter call can be added as well
-           transmissionBuilder.AddMessageEventReceiver<CustomReceiverSubClass>(...);
+           groupBuilder.AddMessageEventReceiver<CustomReceiverSubClass>(...);
         });
     }
 }

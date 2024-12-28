@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OSK.MessageBus.Abstractions;
-using OSK.MessageBus.Events.Abstractions;
+using OSK.MessageBus.Messages.Abstractions;
 using OSK.MessageBus.Models;
 using OSK.MessageBus.Ports;
 using System;

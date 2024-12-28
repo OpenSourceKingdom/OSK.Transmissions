@@ -8,14 +8,14 @@ namespace OSK.MessageBus.Ports
     /// Helps to construct a set of receivers that are tied to given transmitter for message transmission.
     /// </summary>
     [HexagonalIntegration(HexagonalIntegrationType.LibraryProvided)]
-    public interface IMessageTransmissionBuilder
+    public interface IMessageReceiverGroupBuilder
     {
         /// <summary>
         /// The action used to configure message receivers
         /// </summary>
         /// <param name="configurator">The specific receiver configuration action</param>
-        /// <returns>The transmission builder for chaining</returns>
-        IMessageTransmissionBuilder AddConfigurator(Action<IMessageReceiverBuilder> configurator);
+        /// <returns>The group builder for chaining</returns>
+        IMessageReceiverGroupBuilder AddConfigurator(Action<IMessageReceiverBuilder> configurator);
 
         /// <summary>
         /// Builds all receivers that have been configured with the builder

@@ -2,7 +2,7 @@
 using OSK.Functions.Outputs.Abstractions;
 using OSK.Functions.Outputs.Logging.Abstractions;
 using OSK.MessageBus.Abstractions;
-using OSK.MessageBus.Events.Abstractions;
+using OSK.MessageBus.Messages.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

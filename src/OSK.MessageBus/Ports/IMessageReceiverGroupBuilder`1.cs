@@ -7,7 +7,7 @@ namespace OSK.MessageBus.Ports
     /// Helps to construct a set of receivers that are tied to given transmitter for message transmission.
     /// </summary>
     [HexagonalIntegration(HexagonalIntegrationType.LibraryProvided)]
-    public interface IMessageTransmissionBuilder<TReceiver>: IMessageTransmissionBuilder
+    public interface IMessageReceiverGroupBuilder<TReceiver>: IMessageReceiverGroupBuilder
         where TReceiver: IMessageReceiver
     {
         /// <summary>
@@ -21,8 +21,8 @@ namespace OSK.MessageBus.Ports
         /// See <see cref="MessageEventReceiverBase"/> for these parameters
         /// </param>
         /// <param name="receiverBuilder">The builder for custom receiver middleware configuration</param>
-        /// <returns>The transmission builder for chaining</returns>
-        IMessageTransmissionBuilder<TReceiver> AddMessageEventReceiver(string receiverId, object[] parameters, 
+        /// <returns>The group builder for chaining</returns>
+        IMessageReceiverGroupBuilder<TReceiver> AddMessageEventReceiver(string receiverId, object[] parameters, 
             Action<IMessageReceiverBuilder> receiverBuilder);
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace OSK.MessageBus.Ports
         /// See <see cref="MessageEventReceiverBase"/> for these parameters
         /// </param>
         /// <param name="receiverBuilder">The builder for custom receiver middleware configuration</param>
-        /// <returns>The transmission builder for chaining</returns>
-        IMessageTransmissionBuilder<TReceiver> AddMessageEventReceiver<TChildReceiver>(string receiverId, object[] parameters,
+        /// <returns>The group builder for chaining</returns>
+        IMessageReceiverGroupBuilder<TReceiver> AddMessageEventReceiver<TChildReceiver>(string receiverId, object[] parameters,
             Action<IMessageReceiverBuilder> receiverBuilder)
             where TChildReceiver: TReceiver;
     }

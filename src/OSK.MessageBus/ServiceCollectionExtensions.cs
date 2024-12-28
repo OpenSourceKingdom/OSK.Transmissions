@@ -26,7 +26,7 @@ namespace OSK.MessageBus
         {
             services.TryAddTransient<IMessageReceiverManager, MessageReceiverManager>();
             services.TryAddTransient<IMessageBroadcaster, MessageBroadcaster>();
-            services.TryAddTransient(typeof(IMessageTransmissionBuilder<>), typeof(MessageTransmissionBuilder<>));
+            services.TryAddTransient(typeof(IMessageReceiverGroupBuilder<>), typeof(MessageReceiverGroupBuilder<>));
 
             services.Configure(configuration);
 
@@ -38,22 +38,22 @@ namespace OSK.MessageBus
         #region Helpers
 
         public static IServiceCollection AddMessageEventTransmitter<TTransmitter, TReceiver>(this IServiceCollection services, string transmitterId,
-            Action<IMessageTransmissionBuilder<TReceiver>> transmissionBuilderConfiguration)
+            Action<IMessageReceiverGroupBuilder<TReceiver>> receiverGroupConfiguration)
             where TTransmitter : IMessageTransmitter
             where TReceiver : IMessageReceiver
         {
-            if (transmissionBuilderConfiguration is null)
+            if (receiverGroupConfiguration is null)
             {
-                throw new ArgumentNullException(nameof(transmissionBuilderConfiguration));
+                throw new ArgumentNullException(nameof(receiverGroupConfiguration));
             }
 
             services.AddTransient(_ => new MessageTransmitterDescriptor(transmitterId, typeof(TTransmitter)));
             services.AddTransient(serviceProvider =>
             {
-                var transmissionBuilder = serviceProvider.GetRequiredService<IMessageTransmissionBuilder<TReceiver>>();
-                transmissionBuilderConfiguration(transmissionBuilder);
+                var receiverGroupBuilder = serviceProvider.GetRequiredService<IMessageReceiverGroupBuilder<TReceiver>>();
+                receiverGroupConfiguration(receiverGroupBuilder);
 
-                return transmissionBuilder;
+                return receiverGroupBuilder;
             });
 
             return services;

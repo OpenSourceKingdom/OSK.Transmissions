@@ -7,9 +7,9 @@ using OSK.MessageBus.Ports;
 
 namespace OSK.MessageBus.Internal.Services
 {
-    internal class MessageTransmissionBuilder<TReceiver>(IServiceProvider serviceProvider, 
+    internal class MessageReceiverGroupBuilder<TReceiver>(IServiceProvider serviceProvider, 
         IOptions<MessageBusConfigurationOptions> messageBusOptions) 
-        : IMessageTransmissionBuilder<TReceiver>
+        : IMessageReceiverGroupBuilder<TReceiver>
         where TReceiver : IMessageReceiver
     {
         #region Variables
@@ -19,9 +19,9 @@ namespace OSK.MessageBus.Internal.Services
 
         #endregion
 
-        #region IMessageEventTransmissionBuilder
+        #region MessageReceiverGroupBuilder
 
-        public IMessageTransmissionBuilder AddConfigurator(Action<IMessageReceiverBuilder> configurator)
+        public IMessageReceiverGroupBuilder AddConfigurator(Action<IMessageReceiverBuilder> configurator)
         {
             if (configurator == null)
             {
@@ -32,14 +32,14 @@ namespace OSK.MessageBus.Internal.Services
             return this;
         }
 
-        public IMessageTransmissionBuilder<TReceiver> AddMessageEventReceiver(string receiverId, object[] parameters, 
+        public IMessageReceiverGroupBuilder<TReceiver> AddMessageEventReceiver(string receiverId, object[] parameters, 
             Action<IMessageReceiverBuilder> receiverBuilderConfiguration)
         {
             AddReceiver(receiverId, typeof(TReceiver), parameters, receiverBuilderConfiguration);
             return this;
         }
 
-        public IMessageTransmissionBuilder<TReceiver> AddMessageEventReceiver<TChildReceiver>(string receiverId, object[] parameters,
+        public IMessageReceiverGroupBuilder<TReceiver> AddMessageEventReceiver<TChildReceiver>(string receiverId, object[] parameters,
             Action<IMessageReceiverBuilder> receiverBuilderConfiguration)
             where TChildReceiver : TReceiver
         {

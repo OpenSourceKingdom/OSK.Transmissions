@@ -7,18 +7,18 @@ using Xunit;
 
 namespace OSK.MessageBus.UnitTests.Internal.Services
 {
-    public class MessageTransmissionBuilderTests
+    public class MessageReceiverGroupBuilderTests
     {
         #region Variables
 
         private readonly Mock<IServiceProvider> _mockServiceProvider;
-        private readonly MessageTransmissionBuilder<TestMessageReceiver> _builder;
+        private readonly MessageReceiverGroupBuilder<TestMessageReceiver> _builder;
 
         #endregion
 
         #region Constructors
 
-        public MessageTransmissionBuilderTests()
+        public MessageReceiverGroupBuilderTests()
         {
             _mockServiceProvider = new Mock<IServiceProvider>();
 
@@ -26,7 +26,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
             mockOptions.SetupGet(m => m.Value)
                 .Returns(new MessageBusConfigurationOptions());
 
-            _builder = new MessageTransmissionBuilder<TestMessageReceiver>(_mockServiceProvider.Object, mockOptions.Object);
+            _builder = new MessageReceiverGroupBuilder<TestMessageReceiver>(_mockServiceProvider.Object, mockOptions.Object);
         }
 
         #endregion

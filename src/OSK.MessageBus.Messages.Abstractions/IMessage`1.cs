@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace OSK.MessageBus.Events.Abstractions
+namespace OSK.MessageBus.Messages.Abstractions
 {
     /// <summary>
     /// Represents a message that has a typed identifier for an application
     /// </summary>
     /// <typeparam name="TId">The message identifier type</typeparam>
-    public interface IMessage<TId>: IMessage
+    public interface IMessage<TId> : IMessage
         where TId : struct, IEquatable<TId>
     {
         /// <summary>

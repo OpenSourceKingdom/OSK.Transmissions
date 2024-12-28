@@ -1,5 +1,5 @@
-﻿namespace OSK.MessageBus.Events.Abstractions
-{ 
+﻿namespace OSK.MessageBus.Messages.Abstractions
+{
     /// <summary>
     /// Represents a generic message that can be sent through a message bus.
     /// </summary>

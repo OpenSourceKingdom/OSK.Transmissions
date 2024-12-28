@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace OSK.MessageBus.Internal.Services
 {
-    internal class MessageReceiverManager(IEnumerable<IMessageTransmissionBuilder> messageEventTransmissionBuilders) 
+    internal class MessageReceiverManager(IEnumerable<IMessageReceiverGroupBuilder> messageEventTransmissionBuilders) 
         : IMessageReceiverManager
     {
         #region Variables

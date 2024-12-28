@@ -9,7 +9,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
     {
         #region Variables
 
-        private readonly Mock<IMessageTransmissionBuilder> _transmissionBuilder;
+        private readonly Mock<IMessageReceiverGroupBuilder> _transmissionBuilder;
         private readonly MessageReceiverManager _manager;
 
         #endregion
@@ -18,7 +18,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
 
         public MessageReceiverManagerTests()
         {
-            _transmissionBuilder = new Mock<IMessageTransmissionBuilder>();
+            _transmissionBuilder = new Mock<IMessageReceiverGroupBuilder>();
 
             _manager = new MessageReceiverManager([ _transmissionBuilder.Object ]);
         }

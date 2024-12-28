@@ -21,7 +21,7 @@
 
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
-		<ProjectReference Include="..\OSK.MessageBus.Events.Abstractions\OSK.MessageBus.Events.Abstractions.csproj" />
+		<ProjectReference Include="..\OSK.MessageBus.Messages.Abstractions\OSK.MessageBus.Messages.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>
