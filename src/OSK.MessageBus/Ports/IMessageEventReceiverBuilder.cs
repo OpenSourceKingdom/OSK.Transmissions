@@ -7,7 +7,7 @@ namespace OSK.MessageBus.Ports
     [HexagonalPort(HexagonalPort.Primary)]
     public interface IMessageEventReceiverBuilder
     {
-        IMessageEventReceiverBuilder Use(Func<MessageEventDelegate, MessageEventDelegate> middleware);
+        IMessageEventReceiverBuilder Use(Func<MessageEventTransmissionDelegate, MessageEventTransmissionDelegate> middleware);
 
         IMessageEventReceiver BuildReceiver();
     }

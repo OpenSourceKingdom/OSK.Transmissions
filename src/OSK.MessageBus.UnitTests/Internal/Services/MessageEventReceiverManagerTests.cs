@@ -10,7 +10,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
         #region Variables
 
         private readonly Mock<IMessageEventTransmissionBuilder> _transmissionBuilder;
-        private readonly IMessageEventReceiverManager _manager;
+        private readonly MessageEventReceiverManager _manager;
 
         #endregion
 

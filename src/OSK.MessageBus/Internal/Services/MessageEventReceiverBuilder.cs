@@ -14,13 +14,13 @@ namespace OSK.MessageBus.Internal.Services
 
         private const string UnhandledEventMessage = "No event handlers were registered and the event could not be processed.";
 
-        private readonly List<Func<MessageEventDelegate, MessageEventDelegate>> _middlewares = [];
+        private readonly List<Func<MessageEventTransmissionDelegate, MessageEventTransmissionDelegate>> _middlewares = [];
 
         #endregion
 
         #region IMessageEventReceiverBuilder
 
-        public IMessageEventReceiverBuilder Use(Func<MessageEventDelegate, MessageEventDelegate> middleware)
+        public IMessageEventReceiverBuilder Use(Func<MessageEventTransmissionDelegate, MessageEventTransmissionDelegate> middleware)
         {
             if (middleware == null)
             {
@@ -38,7 +38,7 @@ namespace OSK.MessageBus.Internal.Services
                 throw new InvalidOperationException(UnhandledEventMessage);
             }
 
-            MessageEventDelegate eventDelegate = static _ =>
+            MessageEventTransmissionDelegate eventDelegate = static _ =>
             {
                 throw new InvalidOperationException(UnhandledEventMessage);
             };

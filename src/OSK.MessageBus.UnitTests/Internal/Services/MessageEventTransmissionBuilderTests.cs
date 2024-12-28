@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Options;
+using Moq;
 using OSK.MessageBus.Internal.Services;
+using OSK.MessageBus.Options;
 using OSK.MessageBus.Ports;
 using OSK.MessageBus.UnitTests.Helpers;
 using Xunit;
@@ -11,7 +13,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
         #region Variables
 
         private readonly Mock<IServiceProvider> _mockServiceProvider;
-        private readonly IMessageEventTransmissionBuilder<TestMessageReceiver> _builder;
+        private readonly MessageEventTransmissionBuilder<TestMessageReceiver> _builder;
 
         #endregion
 
@@ -21,7 +23,11 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
         {
             _mockServiceProvider = new Mock<IServiceProvider>();
 
-            _builder = new MessageEventTransmissionBuilder<TestMessageReceiver>(_mockServiceProvider.Object);
+            var mockOptions = new Mock<IOptions<MessageBusConfigurationOptions>>();
+            mockOptions.SetupGet(m => m.Value)
+                .Returns(new MessageBusConfigurationOptions());
+
+            _builder = new MessageEventTransmissionBuilder<TestMessageReceiver>(_mockServiceProvider.Object, mockOptions.Object);
         }
 
         #endregion

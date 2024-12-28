@@ -4,7 +4,7 @@ using System;
 
 namespace OSK.MessageBus.Internal.Services
 {
-    public class MessageEventContext<TMessage>(IServiceProvider services, TMessage message, object? rawMessage): IMessageEventContext<TMessage>
+    public class MessageEventTransmissionContext<TMessage>(IServiceProvider services, TMessage message, object? rawMessage): IMessageEventContext<TMessage>
         where TMessage: IMessageEvent
     {
         #region Variables

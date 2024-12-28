@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace OSK.MessageBus
 {
-    public abstract class MessageEventReceiverBase(MessageEventDelegate eventDelegate, IServiceProvider serviceProvider) 
+    public abstract class MessageEventReceiverBase(string receiverId, MessageEventTransmissionDelegate eventDelegate, IServiceProvider serviceProvider) 
         : IMessageEventReceiver
     {
+        public string ReceiverId => receiverId;
+
         public abstract void Dispose();
         public abstract void Start();
 
-        protected Task HandleEventAsync<T>(T message, object? rawMessageEvent)
+        protected Task ProcessTransmissionAsync<T>(T message, object? rawMessageEvent)
             where T : IMessageEvent
         {
             using var scope = serviceProvider.CreateScope();
-            var context = new MessageEventContext<T>(scope.ServiceProvider, message, rawMessageEvent);
+            var context = new MessageEventTransmissionContext<T>(scope.ServiceProvider, message, rawMessageEvent);
             return eventDelegate(context);
         }
     }

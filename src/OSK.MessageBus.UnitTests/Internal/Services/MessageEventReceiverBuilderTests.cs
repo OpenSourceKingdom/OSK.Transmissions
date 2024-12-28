@@ -14,7 +14,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
         #region Variables
 
         private Mock<IServiceProvider> _mockServiceProvider;
-        private IMessageEventReceiverBuilder _builder;
+        private MessageEventReceiverBuilder _builder;
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
 
             // Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => 
-                receiver.EventDelegate(new MessageEventContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null)));
+                receiver.EventDelegate(new MessageEventTransmissionContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null)));
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
             Assert.Equal(hashAlgorithmName, testReceiver.AlgorithmName);
             Assert.Equal(settings, testReceiver.Settings);
 
-            await testReceiver.EventDelegate(new MessageEventContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null));
+            await testReceiver.EventDelegate(new MessageEventTransmissionContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null));
         }
 
         #endregion

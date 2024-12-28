@@ -8,12 +8,6 @@ namespace OSK.MessageBus.Application
     public class MessageBusApplicationService(IMessageEventReceiverManager manager)
         : IHostedService
     {
-        #region Variables
-
-        private bool _configured;
-
-        #endregion
-
         #region IHostedService
 
         public virtual Task StartAsync(CancellationToken cancellationToken)

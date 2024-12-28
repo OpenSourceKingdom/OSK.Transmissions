@@ -18,7 +18,7 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
         private readonly Mock<IServiceProvider> _mockServiceProvider;
         private readonly IOutputFactory<MessageEventBroadcaster> _outputFactory;
 
-        private readonly IMessageEventBroadcaster _broadcaster;
+        private readonly MessageEventBroadcaster _broadcaster;
 
         #endregion
 

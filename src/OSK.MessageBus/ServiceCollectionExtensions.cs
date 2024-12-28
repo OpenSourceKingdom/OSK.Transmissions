@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSK.MessageBus.Abstractions;
 using OSK.MessageBus.Internal;
 using OSK.MessageBus.Internal.Services;
+using OSK.MessageBus.Options;
 using OSK.MessageBus.Ports;
 
 namespace OSK.MessageBus
@@ -11,10 +12,16 @@ namespace OSK.MessageBus
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddMessageBus(this IServiceCollection services)
+            => services.AddMessageBus(_ => { });
+
+        public static IServiceCollection AddMessageBus(this IServiceCollection services, 
+            Action<MessageBusConfigurationOptions> configuration)
         {
             services.TryAddTransient<IMessageEventReceiverManager, MessageEventReceiverManager>();
             services.TryAddTransient<IMessageEventBroadcaster, MessageEventBroadcaster>();
             services.TryAddTransient(typeof(IMessageEventTransmissionBuilder<>), typeof(MessageEventTransmissionBuilder<>));
+
+            services.Configure(configuration);
 
             return services;
         }

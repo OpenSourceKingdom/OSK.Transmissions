@@ -9,5 +9,9 @@ namespace OSK.MessageBus.Ports
     {
         IMessageEventTransmissionBuilder<TReceiver> AddMessageEventReceiver(string receiverId, object[] parameters, 
             Action<IMessageEventReceiverBuilder> receiverBuilder);
+
+        IMessageEventTransmissionBuilder<TReceiver> AddMessageEventReceiver<TChildReceiver>(string receiverId, object[] parameters,
+            Action<IMessageEventReceiverBuilder> receiverBuilder)
+            where TChildReceiver: TReceiver;
     }
 }

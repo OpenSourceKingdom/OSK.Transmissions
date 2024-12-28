@@ -8,6 +8,6 @@ namespace OSK.MessageBus.Ports
     public interface IMessageEventMiddleware<TEvent>
         where TEvent: IMessageEvent
     {
-        Task InvokeAsync(IMessageEventContext<TEvent> context, MessageEventDelegate next);
+        Task InvokeAsync(IMessageEventContext<TEvent> context, MessageEventTransmissionDelegate next);
     }
 }
