@@ -3,7 +3,7 @@ using System;
 
 namespace OSK.MessageBus.Ports
 {
-    [HexagonalPort(HexagonalPort.Primary)]
+    [HexagonalIntegration(HexagonalIntegrationType.LibraryProvided)]
     public interface IMessageEventReceiverManager: IDisposable
     {
         void Start();

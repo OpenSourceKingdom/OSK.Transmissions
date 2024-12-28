@@ -4,7 +4,7 @@ using OSK.Hexagonal.MetaData;
 
 namespace OSK.MessageBus.Ports
 {
-    [HexagonalPort(HexagonalPort.Primary)]
+    [HexagonalIntegration(HexagonalIntegrationType.LibraryProvided)]
     public interface IMessageEventTransmissionBuilder
     {
         IMessageEventTransmissionBuilder AddConfigurator(Action<IMessageEventReceiverBuilder> configurator);

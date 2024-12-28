@@ -4,7 +4,7 @@ using System;
 
 namespace OSK.MessageBus.Ports
 {
-    [HexagonalPort(HexagonalPort.Primary)]
+    [HexagonalIntegration(HexagonalIntegrationType.LibraryProvided)]
     public interface IMessageEventReceiverBuilder
     {
         IMessageEventReceiverBuilder Use(Func<MessageEventTransmissionDelegate, MessageEventTransmissionDelegate> middleware);

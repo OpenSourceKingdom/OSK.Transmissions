@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OSK.MessageBus.Abstractions
 {
-    [HexagonalPort(HexagonalPort.Secondary)]
+    [HexagonalIntegration(HexagonalIntegrationType.IntegrationRequired)]
     public interface IMessageEventTransmitter
     {
         Task TransmitAsync<TMessage>(TMessage message, MessageTransmissionOptions options,
