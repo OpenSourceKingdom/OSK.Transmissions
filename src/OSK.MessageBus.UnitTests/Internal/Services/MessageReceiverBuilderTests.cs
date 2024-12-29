@@ -99,6 +99,56 @@ namespace OSK.MessageBus.UnitTests.Internal.Services
             await testReceiver.EventDelegate(new MessageTransmissionContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null));
         }
 
+        [Fact]
+        public async Task BuildReceiver_Valid_ReturnsTestReceiverWithExpectedDelegateInCorrectMiddlewareOrder()
+        {
+            // Arrange
+            var testInt = 117;
+            var hashAlgorithmName = HashAlgorithmName.SHA1;
+            var receiverId = "abc";
+            var settings = new TestSettings();
+
+            SetupVariables<TestMessageReceiver>(receiverId, [testInt, hashAlgorithmName, settings]);
+
+            var counter = 0;
+            _builder.UseMiddleware((context, next) =>
+            {
+                counter += 1;
+                return next(context);
+            });
+            _builder.UseMiddleware((context, next) =>
+            {
+                counter *= 2;
+                return next(context);
+            });
+            _builder.UseMiddleware((context, next) =>
+            {
+                counter -= 1;
+                return next(context);
+            });
+            _builder.Use(next => _ =>
+            {
+                return Task.CompletedTask;
+            });
+
+            // Act
+            var receiver = _builder.BuildReceiver();
+
+            // Assert
+            Assert.IsType<TestMessageReceiver>(receiver);
+            var testReceiver = (TestMessageReceiver)receiver;
+
+            Assert.Equal(receiverId, testReceiver.ReceiverId);
+            Assert.Equal(testInt, testReceiver.A);
+            Assert.Equal(hashAlgorithmName, testReceiver.AlgorithmName);
+            Assert.Equal(settings, testReceiver.Settings);
+
+            await testReceiver.EventDelegate(new MessageTransmissionContext<TestEvent>(_mockServiceProvider.Object, new TestEvent(), null));
+
+            // Middlewares should go first 
+            Assert.Equal(1, counter);
+        }
+
         #endregion
 
         #region Helpers
