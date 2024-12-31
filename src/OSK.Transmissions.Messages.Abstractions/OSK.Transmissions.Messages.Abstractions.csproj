@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Description>A layer providing common event type abstractions for communicating across a variety of different message buses seamlessly and easily. Meant to allow easy integration between different message buses without causing drastic changes to the consumers. Provides a hosted service and method of adding message receivers to a runtime manager.</Description>
+		<PackageTags>OpenSourceKingdom, OpenSource, Abstractions, Application, Communication, Message, Bus, Architecture, Async, Event, Consistency, Network, Api, Transmit, Receive</PackageTags>
+		<Title>OSK.Transmissions.Messages.Abstractions</Title>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
