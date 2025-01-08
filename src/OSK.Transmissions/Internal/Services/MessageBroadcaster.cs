@@ -26,7 +26,7 @@ namespace OSK.Transmissions.Internal.Services
 
         #region IMessageBroadcaster
 
-        public async Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(TMessage message, Action<MessageBroadcastOptions> broadcastConfiguration,
+        public async Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(TMessage message, Action<MessageBroadcastOptions> broadcastConfiguration,
             CancellationToken cancellationToken = default)
             where TMessage : IMessage
         {
@@ -42,7 +42,9 @@ namespace OSK.Transmissions.Internal.Services
                 ? transmitterDescriptors
                 : transmitterDescriptors.Where(transmitter => options.TargetTransmitterIds.Contains(transmitter.TransmitterId));
 
-            var transmissionResults = new List<MessageTransmissionResult>();
+            var builder = outputFactory.BuildResponse<MessageTransmissionResult>();
+            builder.WithOrigination(OriginationSource);
+
             foreach (var descriptor in targetedDescriptors)
             {
                 var transmissionResult = new MessageTransmissionResult()
@@ -54,35 +56,15 @@ namespace OSK.Transmissions.Internal.Services
                 try
                 {
                     await transmitter.TransmitAsync(message, options.TransmissionOptions, cancellationToken);
+                    builder.AddSuccess(transmissionResult);
                 }
                 catch (Exception ex)
                 {
-                    transmissionResult.Exception = ex;
+                    builder.AddException(ex, transmissionResult);
                 }
-
-                transmissionResults.Add(transmissionResult);
             }
 
-            var errorCount = transmissionResults.Count(transmission => transmission.Exception is not null);
-
-            if (errorCount == 0)
-            {
-                return outputFactory.Success(new BroadcastResult()
-                {
-                    TransmissionResults = transmissionResults
-                });
-            }
-            if (errorCount == transmissionResults.Count)
-            {
-                return outputFactory.Exception<BroadcastResult>
-                    (new AggregateException(transmissionResults.Select(transmission => transmission.Exception)),
-                    OriginationSource);
-            }
-
-            return outputFactory.Create(new BroadcastResult()
-            {
-                TransmissionResults = transmissionResults
-            }, new OutputStatusCode(HttpStatusCode.MultiStatus, DetailCode.DownStreamError, OriginationSource));
+            return builder.BuildResponse();
         }
 
         #endregion

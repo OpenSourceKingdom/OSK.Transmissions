@@ -10,11 +10,11 @@ namespace OSK.Transmissions.Abstractions
 {
     public static class MessageBroadcasterExtensions
     {
-        public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, CancellationToken cancellationToken = default)
+        public static Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, CancellationToken cancellationToken = default)
             where TMessage : IMessage
             => broadcaster.BroadcastMessageAsync(message, TimeSpan.Zero, cancellationToken);
 
-        public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, TimeSpan delayTimeSpan, CancellationToken cancellationToken = default)
+        public static Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, TimeSpan delayTimeSpan, CancellationToken cancellationToken = default)
             where TMessage : IMessage
             => broadcaster.BroadcastMessageAsync(message, options =>
             {
@@ -24,12 +24,12 @@ namespace OSK.Transmissions.Abstractions
                 };
             }, cancellationToken);
 
-        public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message,
+        public static Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message,
             IEnumerable<string> transmitterTargetIds, CancellationToken cancellationToken = default)
             where TMessage : IMessage
             => broadcaster.BroadcastMessageAsync(message, TimeSpan.Zero, transmitterTargetIds, cancellationToken);
 
-        public static Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, TimeSpan delayTimeSpan,
+        public static Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(this IMessageBroadcaster broadcaster, TMessage message, TimeSpan delayTimeSpan,
             IEnumerable<string> transmitterTargetIds, CancellationToken cancellationToken = default)
             where TMessage : IMessage
             => broadcaster.BroadcastMessageAsync(message, options =>

@@ -12,7 +12,7 @@ namespace OSK.Transmissions.Ports
         where TReceiver : IMessageReceiver
     {
         /// <summary>
-        /// Adds a message receiver of type <see cref="{TReceiver}"/> to the message transmission channel with the given id and custom parameters
+        /// Adds a message receiver of group builder receiver type to the message transmission channel with the given id and custom parameters
         /// </summary>
         /// <param name="receiverId">A unique id</param>
         /// <param name="parameters">
