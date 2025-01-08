@@ -21,7 +21,7 @@ namespace OSK.Transmissions.Abstractions
         /// <param name="options">A set of configuration options used in the broadcasting</param>
         /// <param name="cancellationToken">The token to cancel the operation</param>
         /// <returns>An output of the broadcast result</returns>
-        Task<IOutput<BroadcastResult>> BroadcastMessageAsync<TMessage>(TMessage message, Action<MessageBroadcastOptions> options, CancellationToken cancellationToken = default)
+        Task<IOutputResponse<MessageTransmissionResult>> BroadcastMessageAsync<TMessage>(TMessage message, Action<MessageBroadcastOptions> options, CancellationToken cancellationToken = default)
             where TMessage : IMessage;
     }
 }

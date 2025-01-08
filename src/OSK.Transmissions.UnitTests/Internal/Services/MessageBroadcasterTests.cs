@@ -1,4 +1,5 @@
 ﻿using Moq;
+using OSK.Functions.Outputs.Abstractions;
 using OSK.Functions.Outputs.Logging.Abstractions;
 using OSK.Functions.Outputs.Mocks;
 using OSK.Transmissions.Abstractions;
@@ -45,7 +46,7 @@ namespace OSK.Transmissions.UnitTests.Internal.Services
         }
 
         [Fact]
-        public async Task BroadcastMessageAsync_AllTransmittersFail_ReturnsInternalServerErrorWithAggregateException()
+        public async Task BroadcastMessageAsync_AllTransmittersFail_ReturnsMultipleOutputs()
         {
             // Arrange
             var descriptorA = new MessageTransmitterDescriptor("TransmitterA", typeof(TestTransmitterA));
@@ -69,18 +70,17 @@ namespace OSK.Transmissions.UnitTests.Internal.Services
             var result = await _broadcaster.BroadcastMessageAsync(new TestMessage());
 
             // Assert
-            Assert.False(result.IsSuccessful);
-            Assert.Equal(HttpStatusCode.InternalServerError, result.Code.StatusCode);
+            Assert.True(result.IsSuccessful);
+            Assert.Equal(OutputSpecificityCode.MultipleOutputs, result.StatusCode.SpecificityCode);
 
-            Assert.IsType<AggregateException>(result.ErrorInformation.Value.Exception);
-            var aggregateException = (AggregateException)result.ErrorInformation.Value.Exception;
-
-            _ = aggregateException.InnerExceptions.Single(static exception => exception is NotSupportedException);
-            _ = aggregateException.InnerExceptions.Single(static exception => exception is InvalidOperationException);
+            _ = result.Outputs.Single(output => output.ErrorInformation?.Exception is not null &&
+                output.ErrorInformation.Value.Exception is NotSupportedException);
+            _ = result.Outputs.Single(output => output.ErrorInformation?.Exception is not null &&
+                output.ErrorInformation.Value.Exception is InvalidOperationException);
         }
 
         [Fact]
-        public async Task BroadcastMessageAsync_SomeTransmittersFailSomeSucceed_ReturnsMultiStatus()
+        public async Task BroadcastMessageAsync_SomeTransmittersFailSomeSucceed_ReturnsMultipleOutputs()
         {
             // Arrange
             var descriptorA = new MessageTransmitterDescriptor("TransmitterA", typeof(TestTransmitterA));
@@ -102,16 +102,16 @@ namespace OSK.Transmissions.UnitTests.Internal.Services
 
             // Assert
             Assert.True(result.IsSuccessful);
-            Assert.Equal(HttpStatusCode.MultiStatus, result.Code.StatusCode);
-            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => transmission.Successful));
-            Assert.Equal(1, result.Value.TransmissionResults.Count(transmission => !transmission.Successful));
+            Assert.Equal(OutputSpecificityCode.MultipleOutputs, result.StatusCode.SpecificityCode);
+            Assert.Equal(1, result.Outputs.Count(output => output.IsSuccessful));
+            Assert.Equal(1, result.Outputs.Count(output => !output.IsSuccessful));
 
-            var transmissionResultA = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterA");
-            Assert.True(transmissionResultA.Successful);
+            var transmissionResultA = result.Outputs.First(output => output.IsSuccessful && output.Value.TransmitterId == "TransmitterA");
+            Assert.True(transmissionResultA.IsSuccessful);
 
-            var transmissionResultB = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterB");
-            Assert.False(transmissionResultB.Successful);
-            Assert.IsType<InvalidOperationException>(transmissionResultB.Exception);
+            var transmissionResultB = result.Outputs.First(output => output.Value.TransmitterId == "TransmitterB");
+            Assert.False(transmissionResultB.IsSuccessful);
+            Assert.IsType<InvalidOperationException>(transmissionResultB.ErrorInformation.Value.Exception);
         }
 
         [Fact]
@@ -134,14 +134,14 @@ namespace OSK.Transmissions.UnitTests.Internal.Services
 
             // Assert
             Assert.True(result.IsSuccessful);
-            Assert.Equal(HttpStatusCode.OK, result.Code.StatusCode);
-            Assert.Equal(2, result.Value.TransmissionResults.Count(transmission => transmission.Successful));
+            Assert.Equal(OutputSpecificityCode.MultipleOutputs, result.StatusCode.SpecificityCode);
+            Assert.Equal(2, result.Outputs.Count(output => output.IsSuccessful));
 
-            var transmissionResultA = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterA");
-            Assert.True(transmissionResultA.Successful);
+            var transmissionResultA = result.Outputs.First(output => output.IsSuccessful && output.Value.TransmitterId == "TransmitterA");
+            Assert.True(transmissionResultA.IsSuccessful);
 
-            var transmissionResultB = result.Value.TransmissionResults.First(transmission => transmission.TransmitterId == "TransmitterB");
-            Assert.True(transmissionResultB.Successful);
+            var transmissionResultB = result.Outputs.First(output => output.IsSuccessful && output.Value.TransmitterId == "TransmitterB");
+            Assert.True(transmissionResultB.IsSuccessful);
         }
 
         #endregion
